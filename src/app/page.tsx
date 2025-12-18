@@ -38,7 +38,7 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
 } from '@mui/icons-material'
-import figmaFilesData from '../data/figmaFiles.json'
+// import figmaFilesData from '../data/figmaFiles.json' // Removed legacy data
 import SortableCard from '../components/SortableCard'
 import AddEditForm from '../components/AddEditForm'
 import { FigmaFile } from '../types'
@@ -70,8 +70,7 @@ export default function HomePage() {
         setFigmaFiles(files)
       } catch (error) {
         console.error('Error fetching files:', error)
-        // Fallback to default data
-        setFigmaFiles(figmaFilesData)
+        setFigmaFiles([])
       }
     }
 
@@ -209,6 +208,16 @@ export default function HomePage() {
             </Typography>
           </Box>
 
+          <Button
+            color="inherit"
+            startIcon={<AddIcon />}
+            onClick={() => setShowAddForm(true)}
+            size="small"
+            sx={{ color: 'white', mr: 2 }}
+          >
+            Add File
+          </Button>
+
           {isAdmin ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Avatar sx={{ width: 32, height: 32, bgcolor: 'rgba(255,255,255,0.2)' }}>
@@ -219,15 +228,6 @@ export default function HomePage() {
               <Typography variant="body2" sx={{ mr: 2, color: 'white' }}>
                 {adminEmail}
               </Typography>
-              <Button
-                color="inherit"
-                startIcon={<AddIcon />}
-                onClick={() => setShowAddForm(true)}
-                size="small"
-                sx={{ color: 'white' }}
-              >
-                Add File
-              </Button>
               <Button
                 color="inherit"
                 onClick={() => setIsReorderMode(!isReorderMode)}
