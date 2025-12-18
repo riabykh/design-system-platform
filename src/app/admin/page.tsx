@@ -25,7 +25,7 @@ import {
   ArrowBack as ArrowBackIcon
 } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
-import { createClient } from '../../utils/supabase/client'
+import { checkAuth } from '../login/actions'
 // import figmaFilesData from '../../data/figmaFiles.json' // Removed legacy data
 import { fetchFigmaFiles, deleteFigmaFile } from '../../services/api'
 import { FigmaFile } from '../../types'
@@ -55,16 +55,16 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    const supabase = createClient()
-
     // Check session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
+    const checkSession = async () => {
+      const { isAuthenticated } = await checkAuth()
+      if (!isAuthenticated) {
         router.push('/login')
       } else {
         setIsAuthenticated(true)
       }
-    })
+    }
+    checkSession()
 
     // Load files
     const loadFiles = async () => {

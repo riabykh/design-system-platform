@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '../utils/supabase/client'
+import { checkAuth, logout } from './login/actions'
 import {
   Container,
   Typography,
@@ -80,23 +80,13 @@ export default function HomePage() {
 
   // Check auth state
   useEffect(() => {
-    const supabase = createClient()
+    const checkSession = async () => {
+      const { isAuthenticated, user } = await checkAuth()
+      setIsAdmin(isAuthenticated)
+      setAdminEmail(user?.email || '')
+    }
 
-    // Check initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAdmin(!!session)
-      setAdminEmail(session?.user?.email || '')
-    })
-
-    // Listen for changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdmin(!!session)
-      setAdminEmail(session?.user?.email || '')
-    })
-
-    return () => subscription.unsubscribe()
+    checkSession()
   }, [])
 
   const categories = ['All', 'Frequently Used', 'Mobile', 'Admin', 'Participant']
@@ -185,11 +175,9 @@ export default function HomePage() {
   }
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    await logout()
     setIsAdmin(false)
     setAdminEmail('')
-    router.refresh()
   }
 
   const handleLogin = () => {

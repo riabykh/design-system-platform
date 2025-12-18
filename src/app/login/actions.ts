@@ -2,50 +2,66 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { createClient } from '../../utils/supabase/server'
+import { prisma } from '../../lib/prisma'
+import { hashPassword, verifyPassword, createSession, deleteSession, getSession } from '../../lib/auth'
 
 export async function login(formData: FormData) {
-    const supabase = await createClient()
-
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+    const user = await prisma.user.findUnique({
+        where: { email },
     })
 
-    if (error) {
-        redirect('/login?error=Could not authenticate user')
+    // If user not found or password mismatch
+    if (!user || !(await verifyPassword(password, user.password))) {
+        redirect('/login?error=Invalid credentials')
     }
+
+    await createSession(user.id)
 
     revalidatePath('/', 'layout')
     redirect('/')
 }
 
 export async function signup(formData: FormData) {
-    const supabase = await createClient()
-
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    const { error } = await supabase.auth.signUp({
-        email,
-        password,
+    // check if user exists
+    const existingUser = await prisma.user.findUnique({
+        where: { email },
     })
 
-    if (error) {
-        redirect('/login?error=Could not create user')
+    if (existingUser) {
+        redirect('/login?error=User already exists')
     }
+
+    const hashedPassword = await hashPassword(password)
+
+    const user = await prisma.user.create({
+        data: {
+            email,
+            password: hashedPassword,
+        },
+    })
+
+    await createSession(user.id)
 
     revalidatePath('/', 'layout')
     redirect('/')
 }
 
 export async function logout() {
-    const supabase = await createClient()
-    await supabase.auth.signOut()
-
+    await deleteSession()
     revalidatePath('/', 'layout')
     redirect('/login')
+}
+
+export async function checkAuth() {
+    const session = await getSession()
+    return {
+        isAuthenticated: !!session,
+        user: session?.user || null
+    }
 }
