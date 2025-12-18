@@ -54,7 +54,7 @@ export default function HomePage() {
   const router = useRouter()
   const [figmaFiles, setFigmaFiles] = useState<FigmaFile[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('Frequently Used')
+  const [selectedCategory, setSelectedCategory] = useState('All')
   const [isAdmin, setIsAdmin] = useState(false)
   const [adminEmail, setAdminEmail] = useState('')
   const [showAddForm, setShowAddForm] = useState(false)
@@ -105,6 +105,7 @@ export default function HomePage() {
     try {
       const createdFile = await createFigmaFile(newFile)
       setFigmaFiles(prevFiles => [...prevFiles, createdFile])
+      setSelectedCategory('All')
       setShowAddForm(false)
     } catch (error) {
       console.error('Error creating file:', error)
