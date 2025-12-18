@@ -89,7 +89,8 @@ export default function HomePage() {
   const categories = ['All', 'Frequently Used', 'Mobile', 'Admin', 'Participant']
   const filteredFiles = figmaFiles
     .filter(file => {
-      const matchesSearch = file.featureName.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesSearch = file.featureName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        file.description.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesCategory = selectedCategory === '' || selectedCategory === 'All' ||
         (selectedCategory === 'Frequently Used' ? file.isFrequentlyUsed : file.category === selectedCategory)
       return matchesSearch && matchesCategory
