@@ -25,6 +25,7 @@ import {
   ArrowBack as ArrowBackIcon
 } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
+import { createClient } from '../../utils/supabase/client'
 // import figmaFilesData from '../../data/figmaFiles.json' // Removed legacy data
 import { fetchFigmaFiles, deleteFigmaFile } from '../../services/api'
 import { FigmaFile } from '../../types'
@@ -54,16 +55,16 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    // Check authentication
-    const adminStatus = localStorage.getItem('isAdmin') === 'true'
-    const adminEmail = localStorage.getItem('adminEmail')
+    const supabase = createClient()
 
-    if (!adminStatus || !adminEmail) {
-      router.push('/login')
-      return
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsAuthenticated(true)
+    // Check session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        router.push('/login')
+      } else {
+        setIsAuthenticated(true)
+      }
+    })
 
     // Load files
     const loadFiles = async () => {

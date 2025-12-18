@@ -1,42 +1,22 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { login, signup } from './actions'
 import {
   Container,
   TextField,
   Button,
   Typography,
   Box,
-  Alert,
   Card,
   CardContent,
+  Tabs,
+  Tab,
 } from '@mui/material'
 import { Login as LoginIcon } from '@mui/icons-material'
+import { useState } from 'react'
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-
-    // Simple admin authentication (in production, use proper auth)
-    if (email === 'admin@designsystem.com' && password === 'admin123') {
-      localStorage.setItem('isAdmin', 'true')
-      localStorage.setItem('adminEmail', email)
-      router.push('/admin')
-    } else {
-      setError('Invalid credentials. Use admin@designsystem.com / admin123')
-    }
-
-    setLoading(false)
-  }
+  const [tab, setTab] = useState(0)
 
   return (
     <Container maxWidth="sm" sx={{ py: 8 }}>
@@ -45,26 +25,24 @@ export default function LoginPage() {
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <LoginIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
             <Typography variant="h4" component="h1" gutterBottom>
-              Admin Login
+              {tab === 0 ? 'Welcome Back' : 'Create Account'}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Access the design system admin panel
+              {tab === 0 ? 'Sign in to manage your design system' : 'Join to start collaborating'}
             </Typography>
           </Box>
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
-              {error}
-            </Alert>
-          )}
+          <Tabs value={tab} onChange={(_, v) => setTab(v)} centered sx={{ mb: 4 }}>
+            <Tab label="Sign In" />
+            <Tab label="Sign Up" />
+          </Tabs>
 
-          <form onSubmit={handleLogin}>
+          <form action={tab === 0 ? login : signup}>
             <TextField
               fullWidth
               label="Email"
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               margin="normal"
               required
               autoComplete="email"
@@ -73,9 +51,8 @@ export default function LoginPage() {
             <TextField
               fullWidth
               label="Password"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               margin="normal"
               required
               autoComplete="current-password"
@@ -86,25 +63,16 @@ export default function LoginPage() {
               fullWidth
               variant="contained"
               size="large"
-              disabled={loading}
               sx={{ mt: 3, mb: 2 }}
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {tab === 0 ? 'Sign In' : 'Sign Up'}
             </Button>
           </form>
-
-          <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              <strong>Demo Credentials:</strong><br />
-              Email: admin@designsystem.com<br />
-              Password: admin123
-            </Typography>
-          </Box>
 
           <Button
             fullWidth
             variant="text"
-            onClick={() => router.push('/')}
+            onClick={() => window.location.href = '/'}
             sx={{ mt: 2 }}
           >
             ← Back to Design System

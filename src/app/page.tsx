@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '../utils/supabase/client'
 import {
   Container,
   Typography,
@@ -77,13 +78,25 @@ export default function HomePage() {
     loadFiles()
   }, [])
 
-  // Check if user is admin
+  // Check auth state
   useEffect(() => {
-    const adminStatus = localStorage.getItem('isAdmin') === 'true'
-    const email = localStorage.getItem('adminEmail') || ''
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsAdmin(adminStatus)
-    setAdminEmail(email)
+    const supabase = createClient()
+
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAdmin(!!session)
+      setAdminEmail(session?.user?.email || '')
+    })
+
+    // Listen for changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdmin(!!session)
+      setAdminEmail(session?.user?.email || '')
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const categories = ['All', 'Frequently Used', 'Mobile', 'Admin', 'Participant']
@@ -171,11 +184,12 @@ export default function HomePage() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin')
-    localStorage.removeItem('adminEmail')
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
     setIsAdmin(false)
     setAdminEmail('')
+    router.refresh()
   }
 
   const handleLogin = () => {
