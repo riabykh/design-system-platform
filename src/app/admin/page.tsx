@@ -25,19 +25,9 @@ import {
   ArrowBack as ArrowBackIcon
 } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
-import figmaFilesData from '../../data/figmaFiles.json'
-
-interface FigmaFile {
-  id: string
-  featureName: string
-  fileName: string
-  figmaUrl: string
-  description: string
-  category: string
-  icon: string
-  isFrequentlyUsed: boolean
-  createdAt: string
-}
+// import figmaFilesData from '../../data/figmaFiles.json' // Removed legacy data
+import { fetchFigmaFiles, deleteFigmaFile } from '../../services/api'
+import { FigmaFile } from '../../types'
 
 // Helper function to format dates consistently
 const formatDate = (dateString: string) => {
@@ -60,7 +50,7 @@ const getCategoryColor = (category: string) => {
 
 export default function AdminPage() {
   const router = useRouter()
-  const [figmaFiles, setFigmaFiles] = useState<FigmaFile[]>(figmaFilesData)
+  const [figmaFiles, setFigmaFiles] = useState<FigmaFile[]>([])
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
@@ -74,11 +64,27 @@ export default function AdminPage() {
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsAuthenticated(true)
+
+    // Load files
+    const loadFiles = async () => {
+      try {
+        const files = await fetchFigmaFiles()
+        setFigmaFiles(files)
+      } catch (error) {
+        console.error('Error fetching files:', error)
+      }
+    }
+    loadFiles()
   }, [router])
 
-  const handleDeleteFile = (id: string) => {
+  const handleDeleteFile = async (id: string) => {
     if (confirm('Are you sure you want to delete this file?')) {
-      setFigmaFiles(figmaFiles.filter(file => file.id !== id))
+      try {
+        await deleteFigmaFile(id)
+        setFigmaFiles(figmaFiles.filter(file => file.id !== id))
+      } catch (error) {
+        console.error('Error deleting file:', error)
+      }
     }
   }
 
