@@ -149,7 +149,15 @@ export default function SortableCard({
             >
                 <Box sx={{ textAlign: 'center', color: 'white' }}>
                     <DynamicIcon iconName={file.icon} sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    <Typography variant="h6" sx={{
+                        fontWeight: 600,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        px: 2
+                    }}>
                         {file.featureName}
                     </Typography>
                 </Box>
@@ -203,14 +211,24 @@ export default function SortableCard({
                             fontFamily: 'monospace',
                             fontSize: '0.875rem',
                             fontWeight: 600,
-                            color: 'primary.main'
+                            color: 'primary.main',
+                            maxWidth: '140px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
                         }}>
                             {file.fileName}
                         </Typography>
                     )}
                 </Box>
 
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                }}>
                     {file.description}
                 </Typography>
             </CardContent>
