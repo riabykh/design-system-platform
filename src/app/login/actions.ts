@@ -24,32 +24,32 @@ export async function login(formData: FormData) {
     redirect('/')
 }
 
-export async function signup(formData: FormData) {
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+// export async function signup(formData: FormData) {
+const email = formData.get('email') as string
+const password = formData.get('password') as string
 
-    // check if user exists
-    const existingUser = await prisma.user.findUnique({
-        where: { email },
-    })
+// check if user exists
+const existingUser = await prisma.user.findUnique({
+    where: { email },
+})
 
-    if (existingUser) {
-        redirect('/login?error=User already exists')
-    }
+if (existingUser) {
+    redirect('/login?error=User already exists')
+}
 
-    const hashedPassword = await hashPassword(password)
+const hashedPassword = await hashPassword(password)
 
-    const user = await prisma.user.create({
-        data: {
-            email,
-            password: hashedPassword,
-        },
-    })
+const user = await prisma.user.create({
+    data: {
+        email,
+        password: hashedPassword,
+    },
+})
 
-    await createSession(user.id)
+await createSession(user.id)
 
-    revalidatePath('/', 'layout')
-    redirect('/')
+revalidatePath('/', 'layout')
+redirect('/')
 }
 
 export async function logout() {

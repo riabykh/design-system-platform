@@ -1,6 +1,6 @@
 'use client'
 
-import { login, signup } from './actions'
+import { login } from './actions'
 import {
   Container,
   TextField,
@@ -9,14 +9,11 @@ import {
   Box,
   Card,
   CardContent,
-  Tabs,
-  Tab,
 } from '@mui/material'
 import { Login as LoginIcon } from '@mui/icons-material'
-import { useState } from 'react'
 
 export default function LoginPage() {
-  const [tab, setTab] = useState(0)
+
 
   return (
     <Container maxWidth="sm" sx={{ py: 8 }}>
@@ -25,19 +22,14 @@ export default function LoginPage() {
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <LoginIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
             <Typography variant="h4" component="h1" gutterBottom>
-              {tab === 0 ? 'Welcome Back' : 'Create Account'}
+              Admin Login
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {tab === 0 ? 'Sign in to manage your design system' : 'Join to start collaborating'}
+              Sign in to manage your design system
             </Typography>
           </Box>
 
-          <Tabs value={tab} onChange={(_, v) => setTab(v)} centered sx={{ mb: 4 }}>
-            <Tab label="Sign In" />
-            <Tab label="Sign Up" />
-          </Tabs>
-
-          <form action={tab === 0 ? login : signup}>
+          <form action={login}>
             <TextField
               fullWidth
               label="Email"
@@ -65,7 +57,7 @@ export default function LoginPage() {
               size="large"
               sx={{ mt: 3, mb: 2 }}
             >
-              {tab === 0 ? 'Sign In' : 'Sign Up'}
+              Sign In
             </Button>
           </form>
 
