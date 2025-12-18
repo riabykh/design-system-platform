@@ -1,0 +1,35 @@
+[
+  {
+    "id": "2",
+    "featureName": "Admin Dashboard Components",
+    "fileName": "admin-dashboard-components",
+    "figmaUrl": "https://www.figma.com/file/admin-dashboard-components",
+    "description": "Administrative dashboard UI components, data tables, charts, and management interfaces",
+    "category": "Admin",
+    "icon": "Star",
+    "isFrequentlyUsed": true,
+    "createdAt": "2024-01-16T14:30:00Z"
+  },
+  {
+    "id": "4",
+    "featureName": "Mobile Navigation Patterns",
+    "fileName": "mobile-navigation-patterns",
+    "figmaUrl": "https://www.figma.com/file/mobile-navigation-patterns",
+    "description": "Navigation components and patterns for mobile applications including tab bars and side menus",
+    "category": "Mobile",
+    "icon": "Navigation",
+    "isFrequentlyUsed": true,
+    "createdAt": "2024-01-18T11:20:00Z"
+  },
+  {
+    "id": "1",
+    "featureName": "Mobile App Design System",
+    "fileName": "mobile-design-system-v1",
+    "figmaUrl": "https://www.figma.com/file/mobile-design-system",
+    "description": "Complete mobile design system with components, patterns, and guidelines for iOS and Android apps",
+    "category": "Mobile",
+    "icon": "PhoneAndroid",
+    "isFrequentlyUsed": true,
+    "createdAt": "2024-01-15T10:00:00Z"
+  }
+]

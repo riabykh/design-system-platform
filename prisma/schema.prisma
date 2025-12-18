@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model FigmaFile {
+  id               String   @id @default(cuid())
+  featureName      String
+  fileName         String?
+  figmaUrl         String
+  description      String
+  category         String
+  icon             String
+  isFrequentlyUsed Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  order            Int      @default(0)
+}

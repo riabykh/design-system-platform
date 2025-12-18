@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Design System Platform
+
+A modern design system documentation platform built with Next.js and Material-UI, featuring Figma file management and admin controls.
+
+## Features
+
+- **Design Files Homepage**: Browse and access Figma files organized by categories
+- **Admin Mode**: Add, edit, and delete Figma file entries with icon selection
+- **Drag & Drop**: Admins can reorder cards by dragging and dropping
+- **Search & Filter**: Find files by name or category (including "Frequently Used")
+- **Icon Selection**: Choose from popular Material-UI icons for each file
+- **Frequently Used**: Mark files as frequently used (no visual indicators)
+- **Custom Colors**: Admin files use #3F68FF, Mobile files use #025248, Participant files use #142641
+- **Equal Width Cards**: 3 cards per row with consistent sizing
+- **Material Design**: Clean, modern interface using Inter font
+- **Responsive**: Works on desktop and mobile devices
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Usage
 
-## Learn More
+### For Users
+- Browse the homepage to see all available Figma files
+- Use the search bar to find specific features
+- Filter by category (Mobile, Web, Core)
+- Click "Open in Figma" to access the design files
 
-To learn more about Next.js, take a look at the following resources:
+### For Admins
+- Click "Admin Mode" to enable editing capabilities
+- Use "Add Figma File" to create new entries
+- Edit existing files by clicking the edit icon
+- Delete files using the delete icon
+- Toggle back to user mode when done
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout with theme provider
+│   ├── page.tsx            # Homepage with Figma file cards
+│   ├── theme.ts            # Material-UI theme configuration
+│   └── globals.css         # Global styles
+├── data/
+│   └── figmaFiles.json     # Sample data (will be replaced with CMS)
+```
 
-## Deploy on Vercel
+## Technology Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js 14** - React framework with App Router
+- **Material-UI (MUI)** - Component library and design system
+- **TypeScript** - Type safety and better development experience
+- **Inter Font** - Modern typography
+- **Tailwind CSS** - Utility-first CSS framework
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Enhancements
+
+- [ ] Integrate with Payload CMS for dynamic content management
+- [ ] Add authentication system (NextAuth.js)
+- [ ] Implement component library documentation
+- [ ] Add UX patterns section
+- [ ] Deploy to Vercel with database integration
+
+## Development
+
+The project uses a simple JSON file for data storage in the current implementation. This will be replaced with a proper CMS (Payload CMS) in future iterations for production use.
+
+## Design Principles
+
+- **No Drop Shadows**: Following user preference for clean, flat design
+- **Material Design**: Consistent with Google's design language
+- **Inter Font**: Modern, readable typography
+- **Accessibility**: WCAG compliant components
